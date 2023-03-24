@@ -8,10 +8,12 @@
 import SwiftUI
 
 @main
-struct Test_ProgrammaticNavigation_SwiftLeeApp: App {
+struct ListNavigationLinkApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FavoritesProgrammaticallyView()
         }
     }
 }
+
+

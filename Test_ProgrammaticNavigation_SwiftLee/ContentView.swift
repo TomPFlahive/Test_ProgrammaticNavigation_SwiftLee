@@ -7,20 +7,42 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct FavoritesProgrammaticallyView: View {
+
+    @ObservedObject var favoritesStore: FavoritesStore = .standard
+
+    /// Store the favorite that has to be shown inside a detail view.
+    @State var selectedFavorite: String?
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            List(favoritesStore.favorites, id: \.self) { favorite in
+                Button(favorite) {
+
+                    /// Update `selectedFavorite` on tap.
+                    selectedFavorite = favorite
+                }.tint(Color.primary)
+            }.navigationTitle("My Favorites")
+
+                /// Whenever `selectedFavorite` is set, a new `FavoriteDetailView` is pushed.
+                .navigationDestination(for: $selectedFavorite) { favorite in
+                    FavoriteDetailView(favorite: favorite)
+                }
         }
-        .padding()
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+struct FavoriteDetailView: View {
+
+    let favorite: String
+
+    var body: some View {
+        VStack {
+            Text("Opened favorite:")
+            Text(favorite)
+            Button("Remove from favorites") {
+                FavoritesStore.standard.remove(favorite)
+            }
+        }
     }
 }
